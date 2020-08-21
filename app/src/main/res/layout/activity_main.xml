@@ -13,19 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/view_pager" >
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/search_tab_title" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/favorites_tab_title" />
-
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintBottom_toTopOf="@id/view_pager" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
