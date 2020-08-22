@@ -7,7 +7,7 @@ import com.yuriy.imageloader.ui.fragments.FavoritesImagesFragment
 import com.yuriy.imageloader.ui.fragments.FindImagesFragment
 
 class MainTabsPagerAdapter(
-    fragmentActivity: FragmentActivity,
+    fragmentActivity: FragmentActivity
 ) : FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int {
