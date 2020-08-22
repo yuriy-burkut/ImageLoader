@@ -9,6 +9,7 @@ import com.yuriy.imageloader.ui.adapters.MainTabsPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
     private val viewPagerAdapter by lazy {
         MainTabsPagerAdapter(this)
     }

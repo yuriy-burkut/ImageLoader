@@ -2,4 +2,6 @@
     <string name="app_name">ImageLoader</string>
     <string name="search_tab_title">Search</string>
     <string name="favorites_tab_title">Favorites</string>
+    <string name="search_field_hint">Enter image name here</string>
+    <string name="preview">preview</string>
 </resources>
