@@ -1,28 +1,33 @@
 package com.yuriy.imageloader.ui.activities
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yuriy.imageloader.R
 import com.yuriy.imageloader.application.AppClass
 import com.yuriy.imageloader.ui.adapters.MainTabsPagerAdapter
-import com.yuriy.imageloader.viewmodels.ImagesLoaderViewModel
+import com.yuriy.imageloader.ui.fragments.FavoritesImagesFragment
+import com.yuriy.imageloader.ui.fragments.FindImagesFragment
+import com.yuriy.imageloader.viewmodel.ImagesLoaderViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     private val viewPagerAdapter by lazy {
-        MainTabsPagerAdapter(this)
+        val fragments = listOf(
+            FindImagesFragment(),
+            FavoritesImagesFragment()
+        )
+
+        MainTabsPagerAdapter(this, fragments)
     }
 
     @Inject
     lateinit var vmFactory: ViewModelProvider.Factory
 
-    private val viewModel by lazy {
+    val viewModel by lazy {
         ViewModelProvider(
             this,
             vmFactory

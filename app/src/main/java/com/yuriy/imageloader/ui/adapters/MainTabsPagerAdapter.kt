@@ -7,18 +7,19 @@ import com.yuriy.imageloader.ui.fragments.FavoritesImagesFragment
 import com.yuriy.imageloader.ui.fragments.FindImagesFragment
 
 class MainTabsPagerAdapter(
-    fragmentActivity: FragmentActivity
+    fragmentActivity: FragmentActivity, private val fragments: List<Fragment>
 ) : FragmentStateAdapter(fragmentActivity) {
 
     override fun getItemCount(): Int {
-        return 2
+        return fragments.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
+        return fragments[position]
+/*        return when (position) {
             0 -> FindImagesFragment()
             1 -> FavoritesImagesFragment()
             else -> Fragment()
-        }
+        }*/
     }
 }

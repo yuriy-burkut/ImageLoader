@@ -2,8 +2,8 @@ package com.yuriy.imageloader.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.yuriy.imageloader.repositories.ImagesRepository
-import com.yuriy.imageloader.viewmodels.ImagesLoaderViewModel
+import com.yuriy.imageloader.repository.ImagesRepository
+import com.yuriy.imageloader.viewmodel.ImagesLoaderViewModel
 import dagger.MapKey
 import dagger.Module
 import dagger.Provides

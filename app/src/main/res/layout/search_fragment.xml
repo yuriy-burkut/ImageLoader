@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_search_field"
+        android:id="@+id/input_layout_search_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:theme="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
@@ -19,9 +19,11 @@
         android:layout_marginBottom="8dp" >
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_search_images"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search_field_hint"
+            android:inputType="textAutoComplete"
             android:imeOptions="actionSearch"
             android:background="@android:color/white"/>
 
@@ -34,10 +36,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_baseline_search_24"
-        app:layout_constraintStart_toEndOf="@id/et_search_field"
+        app:layout_constraintStart_toEndOf="@id/input_layout_search_field"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/et_search_field"
-        app:layout_constraintBottom_toBottomOf="@id/et_search_field"
+        app:layout_constraintTop_toTopOf="@id/input_layout_search_field"
+        app:layout_constraintBottom_toBottomOf="@id/input_layout_search_field"
         android:contentDescription="@string/preview" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -48,7 +50,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/et_search_field"
+        app:layout_constraintTop_toBottomOf="@id/input_layout_search_field"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

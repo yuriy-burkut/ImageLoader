@@ -1,4 +1,4 @@
-package com.yuriy.imageloader.viewmodels
+package com.yuriy.imageloader.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
