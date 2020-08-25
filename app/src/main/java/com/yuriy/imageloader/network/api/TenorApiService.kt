@@ -17,5 +17,4 @@ interface TenorApiService {
     suspend fun getSearchSuggestions(
         @Query("q") searchRequest: String, @Query("limit") limit: Int
     )
-
 }

@@ -14,4 +14,9 @@ class NetHelper(private val context: Context) {
         return networkInfo != null && networkInfo.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
+    inline fun runIfOnline(action: () -> Unit) {
+        if (isOnline()) {
+            action.invoke()
+        }
+    }
 }

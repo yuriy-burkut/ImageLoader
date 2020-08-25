@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,10 @@ class FindImagesFragment : Fragment() {
         ).get(ImagesLoaderViewModel::class.java)
     }
 
+    private val listAdapter: LoadedImagesAdapter by lazy {
+        LoadedImagesAdapter()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,20 +41,34 @@ class FindImagesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rv_found_items.apply {
-            addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
-            layoutManager = LinearLayoutManager(this@FindImagesFragment.context)
-            adapter = LoadedImagesAdapter()
+        initList()
+        initEditText()
+        observeLiveData()
+    }
 
-            et_search_images.setOnEditorActionListener { v, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+    private fun initEditText() {
+        et_search_images.setOnEditorActionListener { v, actionId, _ ->
+            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.findImages(v.text.toString())
+                viewModel.invalidateList()
+                listAdapter.submitList(null)
+                true
+            } else false
 
-                    TODO()
-                }
-
-                return@setOnEditorActionListener true
-            }
         }
     }
 
+    private fun initList() {
+        rv_found_images_list.apply {
+            addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
+            layoutManager = LinearLayoutManager(this@FindImagesFragment.context)
+            adapter = listAdapter
+        }
+    }
+
+    private fun observeLiveData() {
+        viewModel.networkImageData.observe(viewLifecycleOwner, Observer {
+            listAdapter.submitList(it)
+        })
+    }
 }

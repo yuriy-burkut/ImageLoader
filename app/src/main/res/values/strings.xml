@@ -4,4 +4,6 @@
     <string name="favorites_tab_title">Favorites</string>
     <string name="search_field_hint">Enter image name here</string>
     <string name="preview">preview</string>
+    <string name="network_error">Network error</string>
+    <string name="internet_connection_missing">You don\'t have an internet connection</string>
 </resources>

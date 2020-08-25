@@ -48,6 +48,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.fragment:fragment-ktx:1.2.5"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 
     // Material design
     implementation "com.google.android.material:material:$material_version"
@@ -59,7 +61,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
-    //Chuck
+    // Chuck
     debugImplementation 'com.readystatesoftware.chuck:library:1.1.0'
     releaseImplementation 'com.readystatesoftware.chuck:library-no-op:1.1.0'
 
@@ -77,9 +79,9 @@ dependencies {
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
-
-    // Picasso
-    implementation "com.squareup.picasso:picasso:$picasso_version"
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     // Tests
     testImplementation 'junit:junit:4.13'
