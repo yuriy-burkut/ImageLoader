@@ -12,8 +12,15 @@ import com.yuriy.imageloader.R
 import com.yuriy.imageloader.entities.ImageResult
 import kotlinx.android.synthetic.main.found_image_item.view.*
 
-class LoadedImagesAdapter :
+class LoadedImagesAdapter(val callback: OnItemClickCallback) :
     PagedListAdapter<ImageResult, LoadedImagesAdapter.ViewHolder>(DiffUtilCallBack) {
+
+    interface OnItemClickCallback {
+        fun onImageClick(item: ImageResult)
+        fun onCheckBoxStateChange()
+    }
+
+    val checkedImages: MutableMap<String, ImageResult> = mutableMapOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
@@ -22,18 +29,43 @@ class LoadedImagesAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position).let { holder.bind(it) }
+        getItem(position)?.let {
+            holder.bind(it)
+            holder.setChecked(checkedImages.containsKey(it.id))
+        }
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: ImageResult?) = with(itemView) {
+
             item?.let {
+                setListeners(it)
                 tv_image_title.text = it.id
                 Glide.with(this)
                     .load(it.media[0].gif.previewUrl)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(iv_image_preview)
+            }
+        }
+
+        fun setChecked(state: Boolean) {
+            itemView.chb_select_to_favorites.isChecked = state
+        }
+
+        private fun setListeners(item: ImageResult) = with(itemView) {
+
+            iv_image_preview.setOnClickListener {
+                callback.onImageClick(item)
+            }
+
+            chb_select_to_favorites.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    checkedImages[item.id] = item
+                } else {
+                    checkedImages.remove(item.id)
+                }
+                callback.onCheckBoxStateChange()
             }
         }
     }

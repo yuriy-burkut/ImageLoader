@@ -6,4 +6,6 @@
     <string name="preview">preview</string>
     <string name="network_error">Network error</string>
     <string name="internet_connection_missing">You don\'t have an internet connection</string>
+    <string name="save_images_message">%1$d images will be saved to device</string>
+    <string name="save">SAVE</string>
 </resources>

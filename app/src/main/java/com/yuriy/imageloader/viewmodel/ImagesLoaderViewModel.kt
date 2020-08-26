@@ -1,6 +1,7 @@
 package com.yuriy.imageloader.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import com.yuriy.imageloader.entities.ImageResult
@@ -10,10 +11,16 @@ class ImagesLoaderViewModel(private val repository: ImagesRepository) : ViewMode
 
     val networkImageData: LiveData<PagedList<ImageResult>> = repository.getNetworkImages()
 
+    val checkedImages: MutableLiveData<Map<String, ImageResult>> = MutableLiveData()
+
     fun findImages(searchRequest: String) = repository.initSearch(searchRequest)
 
     fun invalidateList() {
         repository.netDataSourceFactory.sourceLiveData.value?.invalidate()
+    }
+
+    fun saveImages() {
+
     }
 
 }
