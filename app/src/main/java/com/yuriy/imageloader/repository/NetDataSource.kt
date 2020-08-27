@@ -1,9 +1,7 @@
 package com.yuriy.imageloader.repository
 
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.yuriy.imageloader.entities.ImageResult
-import com.yuriy.imageloader.network.api.State
 import com.yuriy.imageloader.network.api.TenorApiService
 import com.yuriy.imageloader.utils.MessageUtils
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +17,6 @@ class NetDataSource(
 ) :
     PageKeyedDataSource<Int, ImageResult>() {
 
-    val state = MutableLiveData<State>()
     private val ioScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     override fun loadInitial(
@@ -32,19 +29,14 @@ class NetDataSource(
             return
         }
 
-        updateState(State.LOADING)
 
         ioScope.launch {
             try {
                 val result = api.getImages(searchRequest, params.requestedLoadSize)
                 if (result != null) {
-                    updateState(State.DONE)
                     callback.onResult(result.imageResults ?: listOf(), null, result.next)
-                } else {
-                    updateState(State.ERROR)
                 }
             } catch (exception: IOException) {
-                updateState(State.ERROR)
                 massageUtils.showError(exception)
             }
         }
@@ -60,22 +52,17 @@ class NetDataSource(
         if (getPrevKey(params.key, params.requestedLoadSize) == null) {
             callback.onResult(listOf(), params.requestedLoadSize)
         } else {
-            updateState(State.LOADING)
 
             ioScope.launch {
                 try {
                     val result = api.getImages(searchRequest, params.requestedLoadSize)
                     if (result != null) {
-                        updateState(State.DONE)
                         callback.onResult(
                             result.imageResults ?: listOf(),
                             getPrevKey(result.next, params.requestedLoadSize)
                         )
-                    } else {
-                        updateState(State.ERROR)
                     }
                 } catch (exception: IOException) {
-                    updateState(State.ERROR)
                     massageUtils.showError(exception)
                 }
             }
@@ -83,7 +70,6 @@ class NetDataSource(
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, ImageResult>) {
-        updateState(State.LOADING)
 
         if (searchRequest.isBlank()) {
             callback.onResult(listOf(), null)
@@ -94,20 +80,12 @@ class NetDataSource(
             try {
                 val result = api.getImages(searchRequest, params.requestedLoadSize, params.key)
                 if (result != null) {
-                    updateState(State.DONE)
                     callback.onResult(result.imageResults ?: listOf(), result.next)
-                } else {
-                    updateState(State.ERROR)
                 }
             } catch (exception: IOException) {
-                updateState(State.ERROR)
                 massageUtils.showError(exception)
             }
         }
-    }
-
-    private fun updateState(newState: State) {
-        state.postValue(newState)
     }
 
     private fun getPrevKey(next: Int, loadSize: Int): Int? {

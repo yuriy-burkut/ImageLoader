@@ -13,8 +13,4 @@ interface TenorApiService {
         @Query("pos") position: Int? = null
     ): TenorGifSearchResponse?
 
-    @GET("search_suggestions")
-    suspend fun getSearchSuggestions(
-        @Query("q") searchRequest: String, @Query("limit") limit: Int
-    )
 }

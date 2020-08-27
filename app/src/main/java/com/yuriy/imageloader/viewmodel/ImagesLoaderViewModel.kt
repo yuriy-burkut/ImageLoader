@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import com.yuriy.imageloader.entities.ImageResult
 import com.yuriy.imageloader.entities.SavedImageInfo
+import com.yuriy.imageloader.livadata.SingleLiveEvent
+import com.yuriy.imageloader.livadata.ViewAction
 import com.yuriy.imageloader.repository.ImagesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +21,7 @@ class ImagesLoaderViewModel(private val repository: ImagesRepository) : ViewMode
     val networkImageData: LiveData<PagedList<ImageResult>> = repository.networkImagesList
     val savedImagesDataInfo: LiveData<PagedList<SavedImageInfo>> = repository.savedImagesListInfo
     val searchRequestString: MutableLiveData<String> = MutableLiveData()
+    val viewAction = SingleLiveEvent<ViewAction>()
 
     val checkedImages: MutableLiveData<MutableMap<String, ImageResult>> = MutableLiveData()
 
@@ -31,19 +34,15 @@ class ImagesLoaderViewModel(private val repository: ImagesRepository) : ViewMode
         repository.netDataSourceFactory.sourceLiveData.value?.invalidate()
     }
 
-    fun saveImages() = ioScope.launch {
+    fun saveImages(images: List<ImageResult>) = ioScope.launch {
 
-        checkedImages.value?.forEach() { entry ->
+        images.forEach { image ->
             with(repository) {
-                val imageInfo = saveImageToFileSystem(entry.value)
+                val imageInfo = saveImageToFileSystem(image)
                 imageInfo?.let {
                     saveImageDataToDatabase(it)
                 }
             }
         }
-    }
-
-    fun openFullScreen(imageInfo: SavedImageInfo) {
-        TODO("Not yet implemented")
     }
 }

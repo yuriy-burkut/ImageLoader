@@ -2,37 +2,33 @@ package com.yuriy.imageloader.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.tabs.TabLayoutMediator
 import com.yuriy.imageloader.R
 import com.yuriy.imageloader.application.AppClass
-import com.yuriy.imageloader.ui.adapters.MainTabsPagerAdapter
-import com.yuriy.imageloader.ui.fragments.FavoritesImagesFragment
-import com.yuriy.imageloader.ui.fragments.FindImagesFragment
+import com.yuriy.imageloader.livadata.ViewAction
+import com.yuriy.imageloader.ui.fragments.FullscreenImageFragment
+import com.yuriy.imageloader.ui.fragments.TabsHostFragment
 import com.yuriy.imageloader.viewmodel.ImagesLoaderViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
+const val IMAGE_URL_KEY = "IMAGE_URL_KEY"
+
 class MainActivity : AppCompatActivity() {
-
-    private val viewPagerAdapter by lazy {
-        val fragments = listOf(
-            FindImagesFragment(),
-            FavoritesImagesFragment()
-        )
-
-        MainTabsPagerAdapter(this, fragments)
-    }
 
     @Inject
     lateinit var vmFactory: ViewModelProvider.Factory
 
-    val viewModel by lazy {
+    private val viewModel by lazy {
         ViewModelProvider(
             this,
             vmFactory
         ).get(ImagesLoaderViewModel::class.java)
     }
+
+    private var tabsFragment: TabsHostFragment = TabsHostFragment()
+    private val fullscreenImageFragment: FullscreenImageFragment = FullscreenImageFragment()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppClass.appComponent.inject(this)
@@ -40,11 +36,38 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        view_pager.adapter = viewPagerAdapter
-        val tabTitles = resources.getStringArray(R.array.tab_titles)
+        if (savedInstanceState == null) {
+            showTabsFragment()
+        }
 
-        TabLayoutMediator(tab_layout, view_pager) { tab, position ->
-            tab.text = tabTitles[position]
-        }.attach()
+        observeLiveData()
+    }
+
+    private fun showTabsFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragments_container, tabsFragment)
+            .commit()
+    }
+
+    private fun showFullscreenFragment(imageUrl: String) {
+
+        val bundle = Bundle().apply {
+            putString(IMAGE_URL_KEY, imageUrl)
+        }
+
+        fullscreenImageFragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragments_container, fullscreenImageFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun observeLiveData() {
+        viewModel.viewAction.observe(this, Observer {
+            if (it is ViewAction.ShowFullScreen) {
+                showFullscreenFragment(it.imageUrl)
+            }
+        })
     }
 }

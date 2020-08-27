@@ -16,7 +16,7 @@ class LoadedImagesAdapter(val callback: OnItemClickCallback) :
     PagedListAdapter<ImageResult, LoadedImagesAdapter.ViewHolder>(DiffUtilCallBack) {
 
     interface OnItemClickCallback {
-        fun onImageClick(item: ImageResult)
+        fun onImageClick(imageUrl: String)
         fun onCheckBoxStateChange()
     }
 
@@ -56,7 +56,7 @@ class LoadedImagesAdapter(val callback: OnItemClickCallback) :
         private fun setListeners(item: ImageResult) = with(itemView) {
 
             iv_image_preview.setOnClickListener {
-                callback.onImageClick(item)
+                callback.onImageClick(item.media.first().gif.imageUrl)
             }
 
             chb_select_to_favorites.setOnCheckedChangeListener { _, isChecked ->

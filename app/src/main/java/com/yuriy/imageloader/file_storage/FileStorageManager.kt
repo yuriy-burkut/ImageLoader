@@ -26,13 +26,11 @@ class FileStorageManager(val context: Context) {
         val previewFullPath: String =
             getOutputDirectory(PREVIEW_DIR).absolutePath + "/" + imageResult.id + "_preview.png"
 
-        val gifPath = downloadFile(imageResult.media.first().gif.imageUrl)?.let {
-            saveFile(it, gifFullPath)
-        }
+        val gifPath = downloadFile(imageResult.media[0].gif.imageUrl)?.saveFile(gifFullPath)
 
-        val previewPath = downloadFile(imageResult.media.first().gif.previewUrl)?.let {
-            saveFile(it, previewFullPath)
-        }
+        val previewPath =
+            downloadFile(imageResult.media[0].gif.previewUrl)?.saveFile(previewFullPath)
+
 
         return if (gifPath != null && previewPath != null) {
             SavedImageInfo(imageResult.id, imageResult.title, previewPath, gifPath)
@@ -72,12 +70,12 @@ class FileStorageManager(val context: Context) {
         }
     }
 
-    private fun saveFile(inputFile: File, filePath: String): String? {
+    private fun File.saveFile(filePath: String): String? {
 
         var isSuccessful = true
         val newFile = File(filePath)
         val outputStream = FileOutputStream(newFile)
-        val bytesToWrite = inputFile.readBytes()
+        val bytesToWrite = this.readBytes()
 
         try {
             outputStream.write(bytesToWrite)

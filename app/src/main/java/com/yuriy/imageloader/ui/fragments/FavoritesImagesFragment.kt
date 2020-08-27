@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yuriy.imageloader.R
-import com.yuriy.imageloader.entities.SavedImageInfo
+import com.yuriy.imageloader.livadata.ViewAction
 import com.yuriy.imageloader.ui.activities.MainActivity
 import com.yuriy.imageloader.ui.adapters.FavoriteImagesAdapter
 import com.yuriy.imageloader.viewmodel.ImagesLoaderViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.foavorites_fragment.*
+import kotlinx.android.synthetic.main.tabs_host_fragment.*
 
 class FavoritesImagesFragment : Fragment(), FavoriteImagesAdapter.OnItemClickCallback {
 
@@ -45,8 +45,8 @@ class FavoritesImagesFragment : Fragment(), FavoriteImagesAdapter.OnItemClickCal
         observeLiveData()
     }
 
-    override fun onImageClick(item: SavedImageInfo) {
-        viewModel.openFullScreen(item)
+    override fun onImageClick(imageUrl: String) {
+        viewModel.viewAction.postValue(ViewAction.ShowFullScreen(imageUrl))
     }
 
     private fun initList() {

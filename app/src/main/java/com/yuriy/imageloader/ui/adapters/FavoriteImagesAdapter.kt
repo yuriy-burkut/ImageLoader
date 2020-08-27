@@ -16,7 +16,7 @@ class FavoriteImagesAdapter(val callback: OnItemClickCallback) :
     PagedListAdapter<SavedImageInfo, FavoriteImagesAdapter.ViewHolder>(DiffUtilCallBack) {
 
     interface OnItemClickCallback {
-        fun onImageClick(item: SavedImageInfo)
+        fun onImageClick(imageUrl: String)
     }
 
     override fun onCreateViewHolder(
@@ -37,7 +37,7 @@ class FavoriteImagesAdapter(val callback: OnItemClickCallback) :
         fun bind(item: SavedImageInfo) = with(itemView) {
 
             iv_image_preview.setOnClickListener {
-                callback.onImageClick(item)
+                callback.onImageClick(item.image_url)
             }
 
             tv_image_title.text = item.id

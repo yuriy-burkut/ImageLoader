@@ -11,12 +11,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yuriy.imageloader.R
-import com.yuriy.imageloader.entities.ImageResult
+import com.yuriy.imageloader.livadata.ViewAction
 import com.yuriy.imageloader.ui.activities.MainActivity
 import com.yuriy.imageloader.ui.adapters.LoadedImagesAdapter
 import com.yuriy.imageloader.viewmodel.ImagesLoaderViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.search_fragment.*
+import kotlinx.android.synthetic.main.tabs_host_fragment.*
 
 class FindImagesFragment : Fragment(), LoadedImagesAdapter.OnItemClickCallback {
 
@@ -82,8 +82,13 @@ class FindImagesFragment : Fragment(), LoadedImagesAdapter.OnItemClickCallback {
 
     private fun setListeners() {
         fab_save_button.setOnClickListener {
-            viewModel.saveImages()
+            viewModel.checkedImages.value = listAdapter.checkedImages
+            viewModel.saveImages(listAdapter.checkedImages.values.toList())
             clearChecked()
+        }
+
+        btn_search.setOnClickListener {
+            findImages(et_search_images.text.toString())
         }
     }
 
@@ -101,12 +106,11 @@ class FindImagesFragment : Fragment(), LoadedImagesAdapter.OnItemClickCallback {
 
     private fun clearChecked() {
         listAdapter.checkedImages.clear()
-        viewModel.checkedImages.value = mutableMapOf()
         listAdapter.notifyDataSetChanged()
     }
 
-    override fun onImageClick(item: ImageResult) {
-        TODO()
+    override fun onImageClick(imageUrl: String) {
+        viewModel.viewAction.postValue(ViewAction.ShowFullScreen(imageUrl))
     }
 
     override fun onCheckBoxStateChange() {

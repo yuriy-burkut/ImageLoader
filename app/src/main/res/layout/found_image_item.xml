@@ -20,7 +20,6 @@
         android:id="@+id/tv_image_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="text"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@id/iv_image_preview"
         app:layout_constraintEnd_toStartOf="@id/chb_select_to_favorites"
