@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.yuriy.imageloader.database.DATABASE_NAME
 import com.yuriy.imageloader.database.SavedImagesDao
 import com.yuriy.imageloader.database.SavedImagesDatabase
+import com.yuriy.imageloader.file_storage.FileStorageManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -25,6 +26,12 @@ class LocalStorageModule {
     @Provides
     fun provideDao(database: SavedImagesDatabase): SavedImagesDao {
         return database.getImagesDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFileStorageManager(context: Context): FileStorageManager {
+        return FileStorageManager(context)
     }
 
 }

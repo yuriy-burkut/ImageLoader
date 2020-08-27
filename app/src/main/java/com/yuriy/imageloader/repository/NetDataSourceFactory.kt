@@ -8,13 +8,14 @@ import com.yuriy.imageloader.utils.MessageUtils
 
 
 class NetDataSourceFactory(
-    private var searchRequest: String,
     private val apiService: TenorApiService,
     private val messageUtils: MessageUtils
 ) : DataSource.Factory<Int, ImageResult>() {
 
     val sourceLiveData =
         MutableLiveData<NetDataSource>()
+
+    private var searchRequest: String = ""
 
     override fun create(): DataSource<Int, ImageResult> {
         val source = NetDataSource(searchRequest, apiService, messageUtils)

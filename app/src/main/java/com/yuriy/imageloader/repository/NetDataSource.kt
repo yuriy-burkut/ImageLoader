@@ -21,13 +21,17 @@ class NetDataSource(
 
     val state = MutableLiveData<State>()
     private val ioScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    var prevPos = 0
-    var nextPos = 0
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, ImageResult>
     ) {
+
+        if (searchRequest.isBlank()) {
+            callback.onResult(listOf(), null, null)
+            return
+        }
+
         updateState(State.LOADING)
 
         ioScope.launch {
@@ -35,7 +39,6 @@ class NetDataSource(
                 val result = api.getImages(searchRequest, params.requestedLoadSize)
                 if (result != null) {
                     updateState(State.DONE)
-                    nextPos = result.next + 1
                     callback.onResult(result.imageResults ?: listOf(), null, result.next)
                 } else {
                     updateState(State.ERROR)
@@ -49,6 +52,10 @@ class NetDataSource(
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, ImageResult>) {
 
+        if (searchRequest.isBlank()) {
+            callback.onResult(listOf(), null)
+            return
+        }
 
         if (getPrevKey(params.key, params.requestedLoadSize) == null) {
             callback.onResult(listOf(), params.requestedLoadSize)
@@ -78,12 +85,16 @@ class NetDataSource(
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, ImageResult>) {
         updateState(State.LOADING)
 
+        if (searchRequest.isBlank()) {
+            callback.onResult(listOf(), null)
+            return
+        }
+
         ioScope.launch {
             try {
                 val result = api.getImages(searchRequest, params.requestedLoadSize, params.key)
                 if (result != null) {
                     updateState(State.DONE)
-                    nextPos = result.next + 1
                     callback.onResult(result.imageResults ?: listOf(), result.next)
                 } else {
                     updateState(State.ERROR)

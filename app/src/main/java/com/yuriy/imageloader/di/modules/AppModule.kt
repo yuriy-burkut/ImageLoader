@@ -1,6 +1,8 @@
 package com.yuriy.imageloader.di.modules
 
 import android.content.Context
+import com.yuriy.imageloader.database.SavedImagesDao
+import com.yuriy.imageloader.file_storage.FileStorageManager
 import com.yuriy.imageloader.network.NetHelper
 import com.yuriy.imageloader.network.api.TenorApiService
 import com.yuriy.imageloader.repository.ImagesRepository
@@ -15,12 +17,12 @@ class AppModule {
     @Provides
     @Singleton
     fun provideRepository(
-        context: Context,
         apiService: TenorApiService,
-        netHelper: NetHelper,
-        messageUtils: MessageUtils
+        messageUtils: MessageUtils,
+        dao: SavedImagesDao,
+        fileStorage: FileStorageManager
     ): ImagesRepository {
-        return ImagesRepository(context, apiService, netHelper, messageUtils)
+        return ImagesRepository(apiService, messageUtils, dao, fileStorage)
     }
 
     @Provides

@@ -9,7 +9,6 @@
         android:id="@+id/iv_image_preview"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="@android:dimen/app_icon_size"
-        android:src="@drawable/ic_launcher_background"
         android:layout_margin="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/tv_image_title"

@@ -54,19 +54,21 @@ class FindImagesFragment : Fragment(), LoadedImagesAdapter.OnItemClickCallback {
             listAdapter.checkedImages.putAll(viewModel.checkedImages.value!!)
         }
 
+        viewModel.searchRequestString.value?.let {
+            et_search_images.setText(it)
+        }
+
         super.onViewStateRestored(savedInstanceState)
     }
 
     private fun initEditText() {
         et_search_images.setOnEditorActionListener { v, actionId, _ ->
-            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.findImages(v.text.toString())
-                viewModel.invalidateList()
-                clearChecked()
-                listAdapter.submitList(null)
-                true
-            } else false
 
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                findImages(v.text.toString())
+            }
+
+            return@setOnEditorActionListener true
         }
     }
 
@@ -82,7 +84,6 @@ class FindImagesFragment : Fragment(), LoadedImagesAdapter.OnItemClickCallback {
         fab_save_button.setOnClickListener {
             viewModel.saveImages()
             clearChecked()
-            listAdapter.notifyDataSetChanged()
         }
     }
 
@@ -110,6 +111,17 @@ class FindImagesFragment : Fragment(), LoadedImagesAdapter.OnItemClickCallback {
 
     override fun onCheckBoxStateChange() {
         viewModel.checkedImages.value = listAdapter.checkedImages
+    }
+
+    private fun findImages(searchRequest: String) {
+        val request = searchRequest.trim()
+
+        if (request.isNotBlank()) {
+            viewModel.findImages(request)
+            viewModel.invalidateList()
+            clearChecked()
+            listAdapter.submitList(null)
+        }
     }
 
 }
